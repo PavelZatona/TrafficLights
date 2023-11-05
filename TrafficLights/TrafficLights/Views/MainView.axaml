@@ -12,5 +12,96 @@
     <vm:MainViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<!-- Styles connect -->
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/Common.axaml" />
+	</UserControl.Styles>
+	
+	<!-- Main grid -->
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<!-- Traffic lights conrol resides here -->
+		<Border
+			Grid.Column="0"
+			Grid.Row="0"
+			Classes="VisibleBorders">
+			
+			<Label HorizontalAlignment="Center">Тут будет светофор</Label>
+				
+		</Border>
+		
+		<!-- Traffic lights buttons resides here -->
+		<Border
+			Grid.Column="0"
+			Grid.Row="1"
+			Classes="VisibleBorder">
+
+			<!-- Buttons table -->
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Button
+					Grid.Column="0"
+					Grid.Row="0"
+					HorizontalAlignment="Center">
+					Зажечь красный
+				</Button>
+
+				<Button
+					Grid.Column="1"
+					Grid.Row="0"
+					HorizontalAlignment="Center">
+					Зажечь жёлтый
+				</Button>
+
+				<Button
+					Grid.Column="2"
+					Grid.Row="0"
+					HorizontalAlignment="Center">
+					Зажечь зелёный
+				</Button>
+
+				<Button
+					Grid.Column="0"
+					Grid.Row="1"
+					HorizontalAlignment="Center">
+					Погасить красный
+				</Button>
+
+				<Button
+					Grid.Column="1"
+					Grid.Row="1"
+					HorizontalAlignment="Center">
+					Погасить жёлтый
+				</Button>
+
+				<Button
+					Grid.Column="2"
+					Grid.Row="1"
+					HorizontalAlignment="Center">
+					Погасить зелёный
+				</Button>
+				
+			</Grid>
+		</Border>
+	</Grid>
+	
+	
 </UserControl>
