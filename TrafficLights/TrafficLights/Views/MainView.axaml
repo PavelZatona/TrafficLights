@@ -36,14 +36,27 @@
 			Classes="VisibleBorders">
 
 			<!-- Traffic lights control -->
-			<controls:TrafficLigthsControl
-				HorizontalAlignment="Center"
-				IsRedLightOn="{ Binding IsRedLigthOn }"
-				IsYellowLightOn="{ Binding IsYellowLigthOn }"
-				IsGreenLightOn="{ Binding IsGreenLigthOn }"
-				Width="300">
-				
-			</controls:TrafficLigthsControl>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="33*" />
+					<ColumnDefinition Width="33*" />
+					<ColumnDefinition Width="33*" />
+				</Grid.ColumnDefinitions>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+				<controls:TrafficLigthsControl
+					Grid.Column="1"
+					Grid.Row="0"
+					HorizontalAlignment="Stretch"
+					IsRedLightOn="{ Binding IsRedLigthOn }"
+					IsYellowLightOn="{ Binding IsYellowLigthOn }"
+					IsGreenLightOn="{ Binding IsGreenLigthOn }">
+
+				</controls:TrafficLigthsControl>
+			</Grid>
 				
 		</Border>
 		

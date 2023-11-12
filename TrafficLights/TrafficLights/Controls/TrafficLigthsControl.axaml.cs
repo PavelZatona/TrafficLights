@@ -1,12 +1,47 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using System;
 
 namespace TrafficLights.Controls
 {
     public partial class TrafficLigthsControl : UserControl
     {
+
+        #region Settings
+
+        /// <summary>
+        /// Border width
+        /// </summary>
+        private const int BorderWidth = 5;
+
+        /// <summary>
+        /// Border color
+        /// </summary>
+        private static readonly Color BorderColor = Colors.Black;
+
+        /// <summary>
+        /// Case color
+        /// </summary>
+        private static readonly Color CaseColor = new Color(255, 40, 40, 40);
+
+
+        #endregion
+
+        #region Readonly stuff
+
+        /// <summary>
+        /// Brush to fill traffic lights case
+        /// </summary>
+        private static readonly IBrush CaseFillBrush = new SolidColorBrush(CaseColor);
+
+        private static readonly IBrush BorderBrush = new SolidColorBrush(BorderColor);
+
+        private static readonly IPen CaseBorderPen = new Pen(BorderBrush, BorderWidth);
+
+        #endregion
+
         #region Red light state
 
         /// <summary>
@@ -71,6 +106,11 @@ namespace TrafficLights.Controls
         /// </summary>
         private int _height;
 
+        /// <summary>
+        /// Прямоугольник, описывающий корпус светофора
+        /// </summary>
+        private Rect _caseRect;
+
         public TrafficLigthsControl()
         {
             InitializeComponent();
@@ -115,6 +155,8 @@ namespace TrafficLights.Controls
         {
             _width = (int)bounds.Width;
             _height = (int)bounds.Height;
+
+            _caseRect = new Rect(0, 0, _width, _height);
         }
 
         /// <summary>
@@ -128,5 +170,23 @@ namespace TrafficLights.Controls
                 OnResize((Rect)e.NewValue);
             }
         }
+
+        /// <summary>
+        /// Переопределяем метод рисования, пришедший нам от предка
+        /// </summary>
+        /// <param name="context">Холст, на котором мы будем рисовать</param>
+        public override void Render(DrawingContext context)
+        {
+            base.Render(context); // Вызов метода отрисовки предка (рисует фон, границы и т.п.)
+
+            // Рисуем корпус светофора
+            context.DrawRectangle
+            (
+                CaseFillBrush, // Кисть для заливки
+                CaseBorderPen, // Перо для рисования границы (оно состоит из кисти и ширины)
+                _caseRect // Прямоугольник, в данном случае заданный верхним левым углом и размерами
+            );
+        }
+
     }
 }
