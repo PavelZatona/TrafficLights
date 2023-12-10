@@ -47,6 +47,16 @@ namespace TrafficLights.Controls
         /// </summary>
         private static readonly Color GreenLightOnColor = Colors.Green;
 
+        /// <summary>
+        /// LEDs radiuses
+        /// </summary>
+        private const int LedsRadius = 5;
+
+        /// <summary>
+        /// Step between LEDs
+        /// </summary>
+        private const int LedsStep = 12;
+
         #endregion
 
         #region Readonly stuff
@@ -59,6 +69,11 @@ namespace TrafficLights.Controls
         private static readonly IBrush TrafficLightsBorderBrush = new SolidColorBrush(BorderColor);
 
         private static readonly IPen BordersPen = new Pen(TrafficLightsBorderBrush, BorderWidth);
+
+        /// <summary>
+        /// Invisible pen
+        /// </summary>
+        private static readonly IPen InvisiblePen = new Pen(new SolidColorBrush(Colors.Transparent), 0);
 
         /// <summary>
         /// Brush to draw off lights
@@ -283,15 +298,31 @@ namespace TrafficLights.Controls
         /// </summary>
         private void DrawLight(DrawingContext drawingContext, IBrush lightBrush, Point lightCenter)
         {
-            drawingContext.DrawEllipse
-            (
-                lightBrush,
-                BordersPen,
-                lightCenter,
-                _rLight,
-                _rLight
-            );
+            for (var y = lightCenter.Y - _rLight + LedsRadius; y <= lightCenter.Y + _rLight/* - LedsRadius*/; y += LedsStep) // Движение по вертикали сверху вниз с шагом 12
+            {
+                for (var x = lightCenter.X - _rLight + LedsRadius; x <= lightCenter.X + _rLight/* - LedsRadius*/; x += LedsStep) // Движение по строке слева направо с шагом 12
+                {
+                    if (Math.Pow((lightCenter.X - x), 2) + Math.Pow((lightCenter.Y - y), 2) <= Math.Pow(_rLight + LedsRadius, 2))
+                    {
+                        DrawLed(drawingContext, lightBrush, new Point(x, y));
+                    }
+                }
+            }
         }
 
+        /// <summary>
+        /// Draw LED
+        /// </summary>
+        private void DrawLed(DrawingContext drawingContext, IBrush ledBrush, Point ledCenter)
+        {
+            drawingContext.DrawEllipse
+            (
+                ledBrush,
+                InvisiblePen,
+                ledCenter,
+                LedsRadius,
+                LedsRadius
+            );
+        }
     }
 }
