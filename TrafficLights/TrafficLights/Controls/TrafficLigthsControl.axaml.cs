@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using System;
+using System.Linq.Expressions;
 
 namespace TrafficLights.Controls
 {
@@ -26,6 +27,25 @@ namespace TrafficLights.Controls
         /// </summary>
         private static readonly Color CaseColor = new Color(255, 40, 40, 40);
 
+        /// <summary>
+        /// Color for off lights
+        /// </summary>
+        private static readonly Color LightOffColor = Colors.Brown;
+
+        /// <summary>
+        /// Color for red light in on state
+        /// </summary>
+        private static readonly Color RedLightOnColor = Colors.Red;
+
+        /// <summary>
+        /// Color for yellow light in on state
+        /// </summary>
+        private static readonly Color YellowLightOnColor = Colors.Yellow;
+
+        /// <summary>
+        /// Color for green light in on state
+        /// </summary>
+        private static readonly Color GreenLightOnColor = Colors.Green;
 
         #endregion
 
@@ -36,9 +56,29 @@ namespace TrafficLights.Controls
         /// </summary>
         private static readonly IBrush CaseFillBrush = new SolidColorBrush(CaseColor);
 
-        private static readonly IBrush BorderBrush = new SolidColorBrush(BorderColor);
+        private static readonly IBrush TrafficLightsBorderBrush = new SolidColorBrush(BorderColor);
 
-        private static readonly IPen CaseBorderPen = new Pen(BorderBrush, BorderWidth);
+        private static readonly IPen BordersPen = new Pen(TrafficLightsBorderBrush, BorderWidth);
+
+        /// <summary>
+        /// Brush to draw off lights
+        /// </summary>
+        private static readonly IBrush LightOffBrush = new SolidColorBrush(LightOffColor);
+
+        /// <summary>
+        /// Brush to draw red light in on state
+        /// </summary>
+        private static readonly IBrush RedLightOnBrush = new SolidColorBrush(RedLightOnColor);
+
+        /// <summary>
+        /// Brush to draw yellow light in on state
+        /// </summary>
+        private static readonly IBrush YellowLightOnBrush = new SolidColorBrush(YellowLightOnColor);
+
+        /// <summary>
+        /// Brush to draw green light in on state
+        /// </summary>
+        private static readonly IBrush GreenLightOnBrush = new SolidColorBrush(GreenLightOnColor);
 
         #endregion
 
@@ -111,6 +151,31 @@ namespace TrafficLights.Controls
         /// </summary>
         private Rect _caseRect;
 
+        /// <summary>
+        /// Центр светофора по горизонтали
+        /// </summary>
+        private double _xCenter;
+
+        /// <summary>
+        /// Радиус огня
+        /// </summary>
+        private double _rLight;
+
+        /// <summary>
+        /// Центр красного огня
+        /// </summary>
+        private Point _redLigthCenter;
+
+        /// <summary>
+        /// Центр жёлтого огня
+        /// </summary>
+        private Point _yellowLigthCenter;
+
+        /// <summary>
+        /// Центр зелёного огня
+        /// </summary>
+        private Point _greenLigthCenter;
+
         public TrafficLigthsControl()
         {
             InitializeComponent();
@@ -157,6 +222,22 @@ namespace TrafficLights.Controls
             _height = (int)bounds.Height;
 
             _caseRect = new Rect(0, 0, _width, _height);
+
+            _xCenter = _width / 2.0;
+
+            var yRed = _height / 6.0;
+            var yYellow = _height / 2.0;
+            var yGreen = _height * 5 / 6.0;
+
+            var r1 = (yGreen - yRed) / 4.0 * 0.9;
+            var r2 = _width / 2.0 * 0.9;
+            _rLight = Math.Min(r1, r2);
+
+            // Вычисление точек центров огней
+            _redLigthCenter = new Point(_xCenter, yRed);
+            _yellowLigthCenter = new Point(_xCenter, yYellow);
+            _greenLigthCenter = new Point(_xCenter, yGreen);
+
         }
 
         /// <summary>
@@ -183,8 +264,38 @@ namespace TrafficLights.Controls
             context.DrawRectangle
             (
                 CaseFillBrush, // Кисть для заливки
-                CaseBorderPen, // Перо для рисования границы (оно состоит из кисти и ширины)
+                BordersPen, // Перо для рисования границы (оно состоит из кисти и ширины)
                 _caseRect // Прямоугольник, в данном случае заданный верхним левым углом и размерами
+            );
+
+            // Рисуем красный огонь
+            context.DrawEllipse
+            (
+                IsRedLightOn ? RedLightOnBrush : LightOffBrush,
+                BordersPen,
+                _redLigthCenter,
+                _rLight,
+                _rLight
+            );
+
+            // Рисуем жёлтый огонь
+            context.DrawEllipse
+            (
+                IsYellowLightOn ? YellowLightOnBrush : LightOffBrush,
+                BordersPen,
+                _yellowLigthCenter,
+                _rLight,
+                _rLight
+            );
+
+            // Рисуем зелёный огонь
+            context.DrawEllipse
+            (
+                IsGreenLightOn ? GreenLightOnBrush : LightOffBrush,
+                BordersPen,
+                _greenLigthCenter,
+                _rLight,
+                _rLight
             );
         }
 
