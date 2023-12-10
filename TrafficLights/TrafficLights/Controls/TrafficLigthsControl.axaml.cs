@@ -269,31 +269,25 @@ namespace TrafficLights.Controls
             );
 
             // Рисуем красный огонь
-            context.DrawEllipse
-            (
-                IsRedLightOn ? RedLightOnBrush : LightOffBrush,
-                BordersPen,
-                _redLigthCenter,
-                _rLight,
-                _rLight
-            );
+            DrawLight(context, IsRedLightOn ? RedLightOnBrush : LightOffBrush, _redLigthCenter);
 
             // Рисуем жёлтый огонь
-            context.DrawEllipse
-            (
-                IsYellowLightOn ? YellowLightOnBrush : LightOffBrush,
-                BordersPen,
-                _yellowLigthCenter,
-                _rLight,
-                _rLight
-            );
+            DrawLight(context, IsYellowLightOn ? YellowLightOnBrush : LightOffBrush, _yellowLigthCenter);
 
             // Рисуем зелёный огонь
-            context.DrawEllipse
+            DrawLight(context, IsGreenLightOn ? GreenLightOnBrush : LightOffBrush, _greenLigthCenter);
+        }
+
+        /// <summary>
+        /// Метод для рисования огня
+        /// </summary>
+        private void DrawLight(DrawingContext drawingContext, IBrush lightBrush, Point lightCenter)
+        {
+            drawingContext.DrawEllipse
             (
-                IsGreenLightOn ? GreenLightOnBrush : LightOffBrush,
+                lightBrush,
                 BordersPen,
-                _greenLigthCenter,
+                lightCenter,
                 _rLight,
                 _rLight
             );
